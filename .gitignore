@@ -35,6 +35,10 @@ Debug
 *.synctex.gz
 *.lol
 
+# Arduino/AVR
+*.elf
+*.hex
+
 # Visual studio
 .vs
 x64

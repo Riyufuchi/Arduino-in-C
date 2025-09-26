@@ -1,43 +1,52 @@
-# Compiler and compiler flags
+# Target MCU and programmer
+MCU     = atmega328p
+F_CPU   = 16000000UL
+BAUD    = 9600
+PROGRAMMER = arduino
+PORT    = /dev/ttyACM0
+
+# Toolchain
+CC      = avr-gcc
+OBJCOPY = avr-objcopy
+AVRDUDE = avrdude
+
+CFLAGS  = -std=c11 -Wall -Os -DF_CPU=$(F_CPU) -mmcu=$(MCU)
+LDFLAGS = -mmcu=$(MCU)
 
 # Project
 SRC_DIR = arduinoInC
 BUILD_DIR = build
 
-# Find all .cpp files
-CPP_SRC_FILES := $(shell find $(SRC_DIR) -type f -name "*.cpp")
-
 C_SRC_FILES := $(shell find $(SRC_DIR) -type f -name "*.c")
 
 # Combine both .cpp and .c source files
-SRC_FILES := $(CPP_SRC_FILES) $(C_SRC_FILES)
+SRC_FILES := $(C_SRC_FILES)
 
 # Generate object file names
-OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SRC_FILES))
+OBJ_FILES := $(patsubst $(SRC_DIR)/%, $(BUILD_DIR)/%, $(C_SRC_FILES:.c=.o))
 
-# Application name
-APP_NAME = ArduinoInC
-APP_TARGET = $(BUILD_DIR)/$(APP_NAME)
+# Target files
+TARGET  = firmware
+HEX     = $(TARGET).hex
 
 # Default target
-all: $(APP_TARGET)
+all: $(HEX)
 
-# Link executable
-$(APP_TARGET): $(OBJ_FILES)
-	$(CXX) $(CXXFLAGS) -o $@ $^ -L$(LIB_DIR) -I$(INC_DIR) -I/usr/include/postgresql $(CXXLIBS)
+$(HEX): $(TARGET).elf
+	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
-# Compile object files
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
-	mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -I/usr/include/postgresql -c $< -o $@
+$(TARGET).elf: $(OBJ_FILES)
+	$(CC) $(LDFLAGS) $^ -o $@
 
-# Create build directory
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean target
+flash: $(HEX)
+	$(AVRDUDE) -p $(MCU) -c $(PROGRAMMER) -P $(PORT) -b 115200 -D -U flash:w:$(HEX):i
+
 clean:
-	rm -rf $(BUILD_DIR) $(APP_TARGET) $(LIB_PATH)
+	rm -f $(OBJ_FILES) $(TARGET).elf $(HEX)
 	
 # Documentation
 docs:

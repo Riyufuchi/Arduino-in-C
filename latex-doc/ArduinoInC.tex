@@ -97,7 +97,16 @@
 % WIP modules
 \usepackage[acronym]{glossaries}
 \newglossaryentry{Arduino}{name={Arduino}, description={A micro-controller for prototyping}}
-%\newacronym{firmware}{GUI}{Graphical User Interface}
+
+\newacronym{gpio}{GPIO}{General Pin Input Output}
+\newacronym{avr}{AVR}{Alf-Egil Bogen and Vegard Wollan RISC microcontroller architecture}
+\newacronym{ide}{IDE}{Integrated Development Environment}
+\newacronym{io}{I/O}{Input/Output}
+\newacronym{usb}{USB}{Universal Serial Bus}
+\newacronym{uart}{UART}{Universal Asynchronous Receiver-Transmitter}
+\newacronym{spi}{SPI}{Serial Peripheral Interface}
+\newacronym{i2c}{I\textsuperscript{2}C}{Inter-Integrated Circuit}
+
 \makeglossaries
 
 % Customize the glossary style to remove page numbers
@@ -147,11 +156,12 @@
 	\pagenumbering{arabic}
 	
 	\clearpage
+	\addcontentsline{toc}{section}{Glossary}
 	\printglossary[type=main, title=Glossary]
-	\printglossary[type=\acronymtype, style=mystyle]
+	
 	\clearpage
-	\lstlistoflistings
-
+	\addcontentsline{toc}{section}{Acronyms}
+	\printglossary[type=\acronymtype, style=mystyle]
 	
 	\chapter{Introduction}
 	\input{chapters/introduction/introduction.tex}
@@ -159,11 +169,15 @@
 	\chapter{Hardware used}
 	\input{chapters/hw/hw.tex}
 	
+	\chapter{Firmware basics}
+	\input{chapters/firmware/firmware101.tex}
+	
 	\chapter{The firmware}
 	\input{chapters/firmware/firmware.tex}
 	
-	%\chapter{C++ front end}
-	
 	\chapter*{Summary}
+	
+	\addcontentsline{toc}{chapter}{List of figures}
+	\lstlistoflistings
 
 \end{document}

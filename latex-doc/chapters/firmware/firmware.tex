@@ -2,9 +2,27 @@
 
 \section{Foreword}
 
-\section{Blink}
-This simple example shows basics how is C firmware controlling the Arduino / it actual micro-controller.
+\section{C recapitulation: bit operations}
 
-\section{SOS}
+\section{Basic register manipulation}
 
+\newpage
+\section{Blink and SOS}
+This simple example shows basics how is C firmware controlling the Arduino / it's actual micro-controller. SOS example the build in LED is used to blink SOS morse code and proper header file .
 
+\subsection{SOS header file}
+\lstinputlisting[caption=sos.h]{../arduinoInC/src/sos/sos.h}
+\newpage
+
+\subsection{SOS initialization function}
+\begin{lstlisting}[caption=sos.c - sos\_init()]
+void sos_init(void)
+{
+    DDRB |= (1 << LED_BUILTIN_PIN);  // Set pin as output
+    // Initial flash sequence
+    PORTB |= (1 << LED_BUILTIN_PIN);   // LED ON
+    _delay_ms(INIT_DELAY);
+    PORTB &= ~(1 << LED_BUILTIN_PIN);  // LED OFF
+    _delay_ms(INIT_DELAY);
+}
+\end{lstlisting}

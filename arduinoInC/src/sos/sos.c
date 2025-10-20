@@ -3,8 +3,7 @@
 // Initialize LED pin as output and flash twice for indication
 void sos_init(void)
 {
-    DDRB |= (1 << LED_BUILTIN_PIN);  // set pin as output
-
+    DDRB |= (1 << LED_BUILTIN_PIN);  // Set pin as output
     // Initial flash sequence
     PORTB |= (1 << LED_BUILTIN_PIN);   // LED ON
     _delay_ms(INIT_DELAY);

@@ -8,12 +8,15 @@
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
+\definecolor{indigo-keywords}{RGB}{111, 0, 255}
+
 \lstdefinestyle{riyuCpp}
 {
-morekeywords={override}, % Add 'override' as a keyword
+language=C++,
+morekeywords={override, inline}, % Add 'override' as a keyword
 backgroundcolor=\color{backcolour},   
 commentstyle=\color{codegreen},
-keywordstyle=\color{magenta},
+keywordstyle=\color{indigo-keywords},
 numberstyle=\tiny\color{codegray},
 stringstyle=\color{codepurple},
 basicstyle=\footnotesize\linespread{0.5},     
